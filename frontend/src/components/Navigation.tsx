@@ -28,7 +28,7 @@ export default function Navigation() {
                             Home
                         </Link>
                         <Link
-                            href="/"
+                            href="/#wildlife"
                             className="flex items-center gap-1 text-foreground hover:text-primary transition-colors"
                         >
                             <FaBinoculars size={16} color="currentColor" />

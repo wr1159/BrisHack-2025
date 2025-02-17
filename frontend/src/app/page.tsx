@@ -151,7 +151,7 @@ export default function Home() {
                 </section>
 
                 {/* Featured Wildlife */}
-                <section className="py-16">
+                <section className="py-16" id="wildlife">
                     <div className="container mx-auto px-4">
                         <motion.h2
                             initial={{ opacity: 0 }}
