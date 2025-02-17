@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-contract BrisHack {
+contract SnapTrack {
     struct Bounty {
         uint256 id;
         uint256 prize;
