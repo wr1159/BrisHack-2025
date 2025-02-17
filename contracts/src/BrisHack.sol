@@ -38,10 +38,10 @@ contract BrisHack {
     // The image is a reference image of the species.
     // When the deadline is met, the bounty creator can choose the winners and distribute the prize inside.
     // TODO: Add an ERC20 Address to allow for the prize to be distributed in a token instead of native currency.
-    function createBounty(uint256 _prize, string memory _speciesName, string memory _speciesDescription, string memory _imageLink, uint256 _deadline) public {
-        require(_prize > 0, "Prize must be greater than 0");
+    function createBounty(string memory _speciesName, string memory _speciesDescription, string memory _imageLink, uint256 _deadline) public payable{
         require(_deadline > block.timestamp, "Deadline must be in the future");
-        Bounty memory newBounty = Bounty(bountyId, _prize, _speciesName, _speciesDescription, _imageLink, _deadline, false, msg.sender);
+        require(msg.value > 0, "Prize must be greater than 0");
+        Bounty memory newBounty = Bounty(bountyId, msg.value, _speciesName, _speciesDescription, _imageLink, _deadline, false, msg.sender);
         bounties[bountyId] = newBounty;
         bountyId++;
     }

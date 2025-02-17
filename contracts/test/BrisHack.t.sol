@@ -19,7 +19,7 @@ contract BrisHackTest is Test {
         vm.warp(100000000); // Set block timestamp to 1000 for testing
         uint256 deadline = block.timestamp + 1 days;
 
-        brisHack.createBounty(prize, speciesName, speciesDescription, imageLink, deadline);
+        brisHack.createBounty{value: prize}(speciesName, speciesDescription, imageLink, deadline);
 
         (uint256 id, uint256 _prize, string memory _speciesName, string memory _speciesDescription, string memory _imageLink, uint256 _deadline, bool isSettled, address creator) = brisHack.bounties(0);
 
@@ -42,7 +42,7 @@ contract BrisHackTest is Test {
         uint256 deadline = block.timestamp + 1 days;
 
         vm.expectRevert("Prize must be greater than 0");
-        brisHack.createBounty(prize, speciesName, speciesDescription, imageLink, deadline);
+        brisHack.createBounty{value: prize}(speciesName, speciesDescription, imageLink, deadline);
     }
 
     function testCreateBountyWithPastDeadline() public {
@@ -54,7 +54,7 @@ contract BrisHackTest is Test {
         uint256 deadline = block.timestamp - 1 days;
 
         vm.expectRevert("Deadline must be in the future");
-        brisHack.createBounty(prize, speciesName, speciesDescription, imageLink, deadline);
+        brisHack.createBounty{value: prize}(speciesName, speciesDescription, imageLink, deadline);
     }
 
     function testViewBounties() public {
@@ -64,7 +64,7 @@ contract BrisHackTest is Test {
         string memory imageLink = "http://example.com/image.png";
         uint256 deadline = block.timestamp + 1 days;
 
-        brisHack.createBounty(prize, speciesName, speciesDescription, imageLink, deadline);
+        brisHack.createBounty{value: prize}(speciesName, speciesDescription, imageLink, deadline);
 
         BrisHack.Bounty[] memory bounties = brisHack.viewBounties(0, 1);
 
@@ -79,13 +79,13 @@ contract BrisHackTest is Test {
         assertEq(bounties[0].creator, address(this));
 
         uint256 newPrize = 100;
-        brisHack.createBounty(newPrize, speciesName, speciesDescription, imageLink, deadline);
+        brisHack.createBounty{value: newPrize}(speciesName, speciesDescription, imageLink, deadline);
         BrisHack.Bounty[] memory newBounties = brisHack.viewBounties(1, 1);
         assertEq(newBounties[0].prize, newPrize);
 
     }
      function testSubmitSighting() public {
-        brisHack.createBounty(100, "Species A", "Description A", "imageLinkA", block.timestamp + 1 days);
+        brisHack.createBounty{value: 100}( "Species A", "Description A", "imageLinkA", block.timestamp + 1 days);
         brisHack.submitSighting(0, "imageLinkSightingA", "Location A");
         (string memory imageLink, string memory location, uint256 timestampSpotted, bool isWinner, address submitter) = brisHack.sightings(0);
         assertEq(imageLink, "imageLinkSightingA");
@@ -96,7 +96,7 @@ contract BrisHackTest is Test {
     }
 
     function testViewSightings() public {
-        brisHack.createBounty(100, "Species A", "Description A", "imageLinkA", block.timestamp + 1 days);
+        brisHack.createBounty{value: 100}("Species A", "Description A", "imageLinkA", block.timestamp + 1 days);
         brisHack.submitSighting(0, "imageLinkSightingA", "Location A");
         brisHack.submitSighting(0, "imageLinkSightingB", "Location B");
         BrisHack.Sighting[] memory sightings = brisHack.viewSightings(0);
@@ -106,7 +106,7 @@ contract BrisHackTest is Test {
     }
 
     function testChooseWinners() public {
-        brisHack.createBounty(100, "Species A", "Description A", "imageLinkA", block.timestamp + 1 days);
+        brisHack.createBounty{value: 100}("Species A", "Description A", "imageLinkA", block.timestamp + 1 days);
         brisHack.submitSighting(0, "imageLinkSightingA", "Location A");
         brisHack.submitSighting(0, "imageLinkSightingB", "Location B");
         uint256[] memory winners = new uint256[](1);
