@@ -12,8 +12,18 @@ contract BrisHack {
         bool isSettled;
         address creator;
     }
+    struct Sighting {
+        string imageLink;
+        string location;
+        uint256 timestampSpotted;
+        bool isWinner;
+        address submitter;
+    }
     uint256 public bountyId;
+    uint256 public sightingId;
     mapping(uint256 => Bounty) public bounties;
+    mapping(uint256 => Sighting) public sightings;
+    mapping(uint256 => uint256[]) public bountySightings;
 
     // Initialize the contract
     constructor() {
@@ -57,14 +67,40 @@ contract BrisHack {
     // The sighting should include image link, location, timestamp spotted, whether it wins, and the address of the submitter.
     // The sighting should be stored in the contract for reference in choosing the winners.
     // The sighting should be stored in a mapping of bountyId to sightings.
+    function submitSighting(uint256 _bountyId, string memory _imageLink, string memory _location) public {
+        require(bounties[_bountyId].deadline > block.timestamp, "Bounty deadline has passed");
+        Sighting memory newSighting = Sighting(_imageLink, _location, block.timestamp, false, msg.sender);
+        sightings[sightingId] = newSighting;
+        bountySightings[_bountyId].push(sightingId);
+        sightingId++;
+    }
 
     // View Sightings for Bounties
     // Users can view all the sightings for a certain bounty.
     // The sightings should be stored in a mapping of bountyId to sightings.
+    function viewSightings(uint256 _bountyId) public view returns (Sighting[] memory) {
+        uint256[] memory _sightings = bountySightings[_bountyId];
+        Sighting[] memory _sightingsData = new Sighting[](_sightings.length);
+        for (uint256 i = 0; i < _sightings.length; i++) {
+            _sightingsData[i] = sightings[_sightings[i]];
+        }
+        return _sightingsData;
+    }
 
     // Choose Winners for Bounties
     // The bounty creator can choose the winners of the bounty.
     // Change an attribute in the sightings to be a winner.
     // Then distribute the prize to the winners.
+    function chooseWinners(uint256 _bountyId, uint256[] memory _winners) public {
+        require(bounties[_bountyId].creator == msg.sender, "Only the creator can choose winners");
+        for (uint256 i = 0; i < _winners.length; i++) {
+            sightings[_winners[i]].isWinner = true;
+        }
+        // Distribute prize to winners
+        // transfer prize to winners
+
+        // Set bounty to settled
+        bounties[_bountyId].isSettled = true;
+    }
 
 }

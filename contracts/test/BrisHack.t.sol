@@ -84,5 +84,38 @@ contract BrisHackTest is Test {
         assertEq(newBounties[0].prize, newPrize);
 
     }
+     function testSubmitSighting() public {
+        brisHack.createBounty(100, "Species A", "Description A", "imageLinkA", block.timestamp + 1 days);
+        brisHack.submitSighting(0, "imageLinkSightingA", "Location A");
+        (string memory imageLink, string memory location, uint256 timestampSpotted, bool isWinner, address submitter) = brisHack.sightings(0);
+        assertEq(imageLink, "imageLinkSightingA");
+        assertEq(location, "Location A");
+        assertEq(timestampSpotted, block.timestamp);
+        assertEq(isWinner, false);
+        assertEq(submitter, address(this));
+    }
+
+    function testViewSightings() public {
+        brisHack.createBounty(100, "Species A", "Description A", "imageLinkA", block.timestamp + 1 days);
+        brisHack.submitSighting(0, "imageLinkSightingA", "Location A");
+        brisHack.submitSighting(0, "imageLinkSightingB", "Location B");
+        BrisHack.Sighting[] memory sightings = brisHack.viewSightings(0);
+        assertEq(sightings.length, 2);
+        assertEq(sightings[0].imageLink, "imageLinkSightingA");
+        assertEq(sightings[1].imageLink, "imageLinkSightingB");
+    }
+
+    function testChooseWinners() public {
+        brisHack.createBounty(100, "Species A", "Description A", "imageLinkA", block.timestamp + 1 days);
+        brisHack.submitSighting(0, "imageLinkSightingA", "Location A");
+        brisHack.submitSighting(0, "imageLinkSightingB", "Location B");
+        uint256[] memory winners = new uint256[](1);
+        winners[0] = 0;
+        brisHack.chooseWinners(0, winners);
+        (, , , bool isWinner, ) = brisHack.sightings(0);
+        assertEq(isWinner, true);
+        (, , , , , , bool isSettled, ) = brisHack.bounties(0);
+        assertEq(isSettled, true);
+    }
 
 }
