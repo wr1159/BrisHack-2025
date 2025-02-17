@@ -28,6 +28,15 @@ interface IndividualBounty {
     isSettled: boolean;
     creator: `0x${string}`;
 }
+
+interface Sighting {
+    id: bigint;
+    imageLink: string;
+    location: string;
+    timestampSpotted: bigint;
+    isWinner: boolean;
+    submitter: `0x${string}`;
+}
 export default function BountyPage() {
     const pathname = usePathname();
     const id = pathname.split("/")[2]; // Get the bounty id from the URL
@@ -35,8 +44,27 @@ export default function BountyPage() {
     const { address } = useAccount();
 
     const [bounty, setBounty] = useState<IndividualBounty | null>(); // Store the bounty data
+    const [sightings, setSightings] = useState<Sighting[]>([]); // Store the sightings data
     const [sightingImage, setSightingImage] = useState("");
     const [sightingLocation, setSightingLocation] = useState("");
+    const {
+        data: sightingsData,
+        error: sightingsError,
+        isLoading: sightingsLoading,
+    } = useReadContract({
+        address: snapTrackAddress,
+        abi: snapTrackAbi,
+        functionName: "viewSightings",
+        args: [id ? BigInt(id) : BigInt(0)], // Fetch sightings by bounty id
+    });
+    console.log("sightingsData", sightingsData);
+
+    useEffect(() => {
+        if (sightingsData) {
+            setSightings([...sightingsData]);
+        }
+    }, [sightingsData]);
+    console.log("sightings", sightings);
 
     // Using wagmi's useReadContract hook to fetch data from the contract
     const { data, error, isLoading } = useReadContract({
@@ -61,7 +89,6 @@ export default function BountyPage() {
             });
         }
     }, [data]);
-    console.log("bounty", bounty);
 
     const createSighting = [
         {
@@ -108,17 +135,71 @@ export default function BountyPage() {
                                                 Prize:{" "}
                                                 {formatEther(bounty.prize)} ETH
                                             </p>
-                                            {/* <p className="text-sm text-foreground">
-                                                Deadline:{" "}
+                                            <p className="text-sm text-muted-foreground">
+                                                Deadline{" "}
                                                 {new Date(
-                                                    bounty.deadline.valueOf() *
-                                                        1000
-                                                ).toLocaleDateString()}
-                                            </p> */}
+                                                    parseInt(
+                                                        bounty.deadline.toString()
+                                                    ) * 1000
+                                                ).toLocaleString()}
+                                            </p>
+                                            {/* Creator */}
+                                            <p className="text-sm text-muted-foreground">
+                                                <Name
+                                                    address={bounty.creator}
+                                                    chain={baseSepolia}
+                                                    className="text-sm font-serif"
+                                                />
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
                             )
+                        )}
+                    </div>
+                </section>
+                {/* Sightings Section */}
+                <section className="py-16">
+                    <div className="container mx-auto px-4 max-w-4xl">
+                        <motion.h2
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            className="text-3xl font-bold text-center mb-12 text-foreground"
+                        >
+                            Sightings
+                        </motion.h2>
+
+                        {sightingsLoading ? (
+                            <p>Loading sightings...</p>
+                        ) : sightingsError ? (
+                            <p>Error loading sightings</p>
+                        ) : sightings.length > 0 ? (
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                {sightings.map((sighting) => (
+                                    <div
+                                        key={sighting.id}
+                                        className="border border-border p-4 rounded-lg bg-background/50"
+                                    >
+                                        <img
+                                            src={sighting.imageLink}
+                                            alt={`Sighting by ${sighting.submitter}`}
+                                            className="w-full h-32 object-cover rounded-lg mb-4"
+                                        />
+                                        <p className="text-lg text-foreground">
+                                            {sighting.location}
+                                        </p>
+                                        <p className="text-sm text-foreground">
+                                            {new Date(
+                                                parseInt(
+                                                    sighting.timestampSpotted.toString()
+                                                ) * 1000
+                                            ).toLocaleString()}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <p>No sightings submitted yet.</p>
                         )}
                     </div>
                 </section>

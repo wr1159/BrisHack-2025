@@ -13,7 +13,7 @@ export function WalletComponents() {
             <Wallet>
                 <ConnectWallet className="bg-primary hover:scale-105 transition-transform hover:bg-primary">
                     <Avatar className="h-6 w-6" />
-                    <Name />
+                    <Name className="font-serif" />
                 </ConnectWallet>
                 <WalletDropdown className="z-20">
                     <Identity className="px-4 pt-3 pb-2" hasCopyAddressOnClick>
