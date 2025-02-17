@@ -122,7 +122,7 @@ export default function BountyPage() {
                                     <h2 className="text-3xl font-bold text-foreground mb-4">
                                         {bounty.speciesName}
                                     </h2>
-                                    <div className="flex items-center space-x-4">
+                                    <div className="flex items-center space-x-4 sm:flex-row flex-col">
                                         <img
                                             src={bounty.imageLink}
                                             alt={bounty.speciesName}
