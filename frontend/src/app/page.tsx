@@ -1,101 +1,151 @@
-import Image from "next/image";
+"use client";
+
+
+import { motion } from 'framer-motion';
+import Image from 'next/image';
+
+import RainEffect from '../components/RainEffect';
+import AnimalCard from '@/components/AnimalCard';
+
+const wildlifeSpecies = [
+  {
+    name: 'Scarlet Macaw',
+    habitat: 'Canopy Layer',
+    description: 'Vibrant tropical parrot with brilliant plumage',
+    image: '/images/macaw.jpg',
+    link: '/wildlife/macaw'
+  },
+  {
+    name: 'Jaguar',
+    habitat: 'Forest Floor',
+    description: 'Apex predator of the Amazon rainforest',
+    image: '/images/jaguar.jpg',
+    link: '/wildlife/jaguar'
+  },
+  {
+    name: 'Poison Dart Frog',
+    habitat: 'Understory',
+    description: 'Small amphibian with bright warning colors',
+    image: '/images/frog.jpg',
+    link: '/wildlife/frog'
+  },
+];
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+    <div className="relative min-h-screen">
+      <RainEffect />
+      
+      <motion.main 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="relative z-10"
+      >
+        {/* Hero Section */}
+        <section className="relative h-[60vh] w-full">
+          <div className="absolute inset-0">
             <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+              src="/images/jungle-canopy.jpg"
+              alt="Rainforest Canopy"
+              fill
+              className="object-cover"
+              priority
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+            <div className="absolute inset-0 bg-black/50" />
+          </div>
+          
+          <div className="relative h-full flex items-center justify-center text-center">
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.8 }}
+              className="max-w-4xl px-4"
+            >
+              <h1 className="text-4xl md:text-6xl font-bold text-primary mb-6">
+                Explore the Rainforest
+              </h1>
+              <p className="text-lg md:text-xl text-foreground/90">
+                Discover the world's most biodiverse ecosystem and learn how we can protect it
+              </p>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Stats Section */}
+        <section className="bg-card py-16">
+          <div className="container mx-auto px-4 grid md:grid-cols-3 gap-8">
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              className="p-6 rounded-lg border border-border"
+            >
+              <h3 className="text-2xl font-bold text-primary mb-2">50%</h3>
+              <p className="text-foreground/80">of Earth's species live in rainforests</p>
+            </motion.div>
+            
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              className="p-6 rounded-lg border border-border"
+            >
+              <h3 className="text-2xl font-bold text-primary mb-2">30%</h3>
+              <p className="text-foreground/80">of global oxygen production</p>
+            </motion.div>
+            
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              className="p-6 rounded-lg border border-border"
+            >
+              <h3 className="text-2xl font-bold text-primary mb-2">1/5</h3>
+              <p className="text-foreground/80">of freshwater sources originate here</p>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Featured Wildlife */}
+        <section className="py-16">
+          <div className="container mx-auto px-4">
+            <motion.h2
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              className="text-3xl font-bold text-center mb-12 text-foreground"
+            >
+              Current Bounties
+            </motion.h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {wildlifeSpecies.map((animal, index) => (
+                <AnimalCard
+                  key={animal.name}
+                  {...animal}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="bg-primary/10 py-16">
+          <div className="container mx-auto px-4 text-center">
+            <motion.div
+              initial={{ scale: 0.95 }}
+              whileInView={{ scale: 1 }}
+              className="max-w-2xl mx-auto"
+            >
+              <h2 className="text-3xl font-bold text-foreground mb-4">
+                Join Our Conservation Efforts
+              </h2>
+              <p className="text-foreground/80 mb-8">
+                Help us protect these vital ecosystems for future generations
+              </p>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                className="bg-primary text-primary-foreground px-8 py-3 rounded-lg"
+              >
+                Get Involved
+              </motion.button>
+            </motion.div>
+          </div>
+        </section>
+      </motion.main>
     </div>
   );
 }
