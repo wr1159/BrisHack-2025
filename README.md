@@ -1,8 +1,11 @@
 **SnapTrack - Blockchain-Powered Wildlife Sightings**
+
 **Overview**
+
 SnapTrack is a decentralized application (dApp) that allows users to set bounties for images of wildlife sightings. By leveraging blockchain technology, the platform ensures transparency, security, and fair rewards for participants who contribute verified wildlife images.
 
 **Features**
+
 •	**Bounty Creation**: Users can create bounties for specific wildlife sightings by specifying location, species, and reward amount.
 
 •	**Secure Transactions**: All bounty payments are handled via smart contracts, ensuring trust and fairness.
