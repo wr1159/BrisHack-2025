@@ -12,9 +12,16 @@ export default function RainEffect() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    // Set canvas to full window size
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
 
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // Raindrop configuration with blue colors
     const drops: Array<{
       x: number;
       y: number;
@@ -23,6 +30,7 @@ export default function RainEffect() {
       opacity: number;
     }> = [];
 
+    // Initialize raindrops
     for (let i = 0; i < 150; i++) {
       drops.push({
         x: Math.random() * canvas.width,
@@ -33,12 +41,13 @@ export default function RainEffect() {
       });
     }
 
+    // Rain animation loop
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      // Use a brighter color for the rain
-      ctx.strokeStyle = `hsla(--primary / 0.8)`; // Brighter lime green
-      
+
+      // Use a blue color for the rain
+      ctx.strokeStyle = `hsla(210, 80%, 70%, 0.8)`; // Light blue with opacity
+
       drops.forEach((drop) => {
         ctx.beginPath();
         ctx.moveTo(drop.x, drop.y);
@@ -46,7 +55,10 @@ export default function RainEffect() {
         ctx.lineWidth = 1.5; // Slightly thicker lines
         ctx.stroke();
 
+        // Update position
         drop.y += drop.speed;
+
+        // Reset position when off screen
         if (drop.y > canvas.height) {
           drop.y = Math.random() * -canvas.height;
           drop.x = Math.random() * canvas.width;
@@ -59,7 +71,7 @@ export default function RainEffect() {
     animate();
 
     return () => {
-      window.removeEventListener('resize', () => {});
+      window.removeEventListener('resize', resizeCanvas);
     };
   }, []);
 

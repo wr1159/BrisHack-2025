@@ -1,29 +1,21 @@
 "use client";
 
+import { useTheme } from 'next-themes';
 import { useState, useEffect } from 'react';
 import { Moon, Sun } from 'react-feather';
 
 export default function ThemeToggle() {
-  const [mounted, setMounted] = useState(false);
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const { theme, setTheme } = useTheme()
 
-  // Ensure the component is mounted before rendering
-  useEffect(() => {
-    setMounted(true);
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    setTheme(savedTheme === 'dark' ? 'dark' : 'light');
-  }, []);
+ 
 
   // Toggle between light and dark mode
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
-    document.documentElement.classList.toggle('dark', newTheme === 'dark');
   };
 
-  if (!mounted) return null;
-
+ 
   return (
     <button
       onClick={toggleTheme}

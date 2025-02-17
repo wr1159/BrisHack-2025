@@ -16,10 +16,10 @@ const wildlifeSpecies = [
     link: '/wildlife/macaw'
   },
   {
-    name: 'Jaguar',
+    name: 'Scottish Wildcat',
     habitat: 'Forest Floor',
     description: 'Apex predator of the Amazon rainforest',
-    image: '/images/jaguar.jpg',
+    image: '/images/5125.jpg',
     link: '/wildlife/jaguar'
   },
   {
@@ -43,16 +43,7 @@ export default function Home() {
       >
         {/* Hero Section */}
         <section className="relative h-[60vh] w-full">
-          <div className="absolute inset-0">
-            <Image
-              src="/images/jungle-canopy.jpg"
-              alt="Rainforest Canopy"
-              fill
-              className="object-cover"
-              priority
-            />
-            <div className="absolute inset-0 bg-black/50" />
-          </div>
+
           
           <div className="relative h-full flex items-center justify-center text-center">
             <motion.div
@@ -61,7 +52,7 @@ export default function Home() {
               transition={{ duration: 0.8 }}
               className="max-w-4xl px-4"
             >
-              <h1 className="text-4xl md:text-6xl font-bold text-primary mb-6">
+              <h1 className="text-4xl md:text-7xl font-bold text-primary mb-6">
                 Explore the Rainforest
               </h1>
               <p className="text-lg md:text-xl text-foreground/90">
@@ -72,29 +63,29 @@ export default function Home() {
         </section>
 
         {/* Stats Section */}
-        <section className="bg-card py-16">
-          <div className="container mx-auto px-4 grid md:grid-cols-3 gap-8">
+        <section className="py-16">
+          <div className="container mx-auto px-4 grid md:grid-cols-3 gap-8 ">
             <motion.div
               whileHover={{ scale: 1.05 }}
-              className="p-6 rounded-lg border border-border"
+              className="p-6 rounded-lg border border-border bg-background/50 "
             >
-              <h3 className="text-2xl font-bold text-primary mb-2">50%</h3>
+              <h3 className="text-2xl font-bold text-foreground/80 mb-2">50%</h3>
               <p className="text-foreground/80">of Earth's species live in rainforests</p>
             </motion.div>
             
             <motion.div
               whileHover={{ scale: 1.05 }}
-              className="p-6 rounded-lg border border-border"
+              className="p-6 rounded-lg border border-border bg-background/50 "
             >
-              <h3 className="text-2xl font-bold text-primary mb-2">30%</h3>
+              <h3 className="text-2xl font-bold text-foreground/80 mb-2">30%</h3>
               <p className="text-foreground/80">of global oxygen production</p>
             </motion.div>
             
             <motion.div
               whileHover={{ scale: 1.05 }}
-              className="p-6 rounded-lg border border-border"
+              className="p-6 rounded-lg border border-border bg-background/50 "
             >
-              <h3 className="text-2xl font-bold text-primary mb-2">1/5</h3>
+              <h3 className="text-2xl font-bold text-foreground/80 mb-2">1/5</h3>
               <p className="text-foreground/80">of freshwater sources originate here</p>
             </motion.div>
           </div>
@@ -131,7 +122,7 @@ export default function Home() {
               className="max-w-2xl mx-auto"
             >
               <h2 className="text-3xl font-bold text-foreground mb-4">
-                Join Our Conservation Efforts
+                Place A Bounty
               </h2>
               <p className="text-foreground/80 mb-8">
                 Help us protect these vital ecosystems for future generations

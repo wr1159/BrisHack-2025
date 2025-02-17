@@ -6,14 +6,14 @@ import ThemeToggle from './ThemeToggle';
 
 export default function Navigation() {
   return (
-    <nav className="bg-card border-b border-border/50 p-4 shadow-lg">
+    <nav className="bg-foreground/10 p-2 border-b border-border/50  shadow-lg ">
       <div className="container mx-auto flex items-center justify-between">
         {/* Logo */}
         <Link
           href="/"
           className="flex items-center gap-2 text-xl font-bold text-primary"
         >
-          <FaLeaf className="h-6 w-6" />
+          <FaLeaf size={24} color="currentColor" />
           Rainforest Explorer
         </Link>
 
@@ -24,21 +24,21 @@ export default function Navigation() {
               href="/"
               className="flex items-center gap-1 text-foreground hover:text-primary transition-colors"
             >
-              <FaLeaf className="h-4 w-4" />
+              <FaLeaf size={16} color="currentColor" />
               Home
             </Link>
             <Link
               href="/wildlife"
               className="flex items-center gap-1 text-foreground hover:text-primary transition-colors"
             >
-              <FaBinoculars className="h-4 w-4" />
+              <FaBinoculars size={16} color="currentColor" />
               Wildlife
             </Link>
             <Link
               href="/about"
               className="flex items-center gap-1 text-foreground hover:text-primary transition-colors"
             >
-              <FaInfoCircle className="h-4 w-4" />
+              <FaInfoCircle size={16} color="currentColor" />
               About
             </Link>
           </div>

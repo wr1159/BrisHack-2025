@@ -28,7 +28,7 @@ export default function AnimalCard({
       className="rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
     >
       <Link href={link}>
-        <div className="relative h-48 w-full overflow-hidden group">
+        <div className="relative h-64 w-full overflow-hidden group">
           <Image
             src={image}
             alt={`Learn more about ${name}`}
