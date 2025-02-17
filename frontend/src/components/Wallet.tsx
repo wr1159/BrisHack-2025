@@ -9,9 +9,9 @@ import { Address, Avatar, Name, Identity } from "@coinbase/onchainkit/identity";
 
 export function WalletComponents() {
     return (
-        <div className="flex justify-end">
+        <div className="flex justify-end text-foreground hover:text-primary transtion-colors">
             <Wallet>
-                <ConnectWallet>
+                <ConnectWallet className="bg-primary hover:scale-105 transition-transform hover:bg-primary">
                     <Avatar className="h-6 w-6" />
                     <Name />
                 </ConnectWallet>
