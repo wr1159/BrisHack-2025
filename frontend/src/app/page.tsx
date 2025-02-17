@@ -6,33 +6,58 @@ import Image from "next/image";
 import RainEffect from "../components/RainEffect";
 import AnimalCard from "@/components/AnimalCard";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { snapTrackAbi, snapTrackAddress } from "@/lib/calls";
+import { useReadContract } from "wagmi";
 
-const wildlifeSpecies = [
-    {
-        name: "Scarlet Macaw",
-        habitat: "Canopy Layer",
-        description: "Vibrant tropical parrot with brilliant plumage",
-        image: "/images/macaw.jpg",
-        link: "/wildlife/macaw",
-    },
-    {
-        name: "Scottish Wildcat",
-        habitat: "Forest Floor",
-        description: "Apex predator of the Amazon rainforest",
-        image: "/images/5125.jpg",
-        link: "/wildlife/jaguar",
-    },
-    {
-        name: "Poison Dart Frog",
-        habitat: "Understory",
-        description: "Small amphibian with bright warning colors",
-        image: "/images/frog.jpg",
-        link: "/wildlife/frog",
-    },
-];
+// const wildlifeSpecies = [
+//     {
+//         name: "Scarlet Macaw",
+//         habitat: "Canopy Layer",
+//         description: "Vibrant tropical parrot with brilliant plumage",
+//         image: "/images/macaw.jpg",
+//         link: "/wildlife/macaw",
+//     },
+//     {
+//         name: "Scottish Wildcat",
+//         habitat: "Forest Floor",
+//         description: "Apex predator of the Amazon rainforest",
+//         image: "/images/5125.jpg",
+//         link: "/wildlife/jaguar",
+//     },
+//     {
+//         name: "Poison Dart Frog",
+//         habitat: "Understory",
+//         description: "Small amphibian with bright warning colors",
+//         image: "/images/frog.jpg",
+//         link: "/wildlife/frog",
+//     },
+// ];
 
 export default function Home() {
     const { scrollY } = useScroll(); // Track scroll position
+    interface Bounty {
+        id: bigint;
+        prize: bigint;
+        speciesName: string;
+        speciesDescription: string;
+        imageLink: string;
+    }
+
+    const [bounties, setBounties] = useState<Bounty[]>([]); // Store fetched bounties
+
+    // Fetch bounties from the contract
+    const { data, error, isLoading } = useReadContract({
+        address: snapTrackAddress,
+        abi: snapTrackAbi,
+        functionName: "viewBounties",
+        args: [BigInt(0), BigInt(10)], // Fetch first 10 bounties
+    });
+    useEffect(() => {
+        if (data) {
+            setBounties([...data]);
+        }
+    }, [data]);
 
     // Move image from left (-200px) to right (200px) as user scrolls from 0px to 1000px
     const x = useTransform(scrollY, [0, 1000], [-200, 200]);
@@ -137,10 +162,28 @@ export default function Home() {
                         </motion.h2>
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            {isLoading ? (
+                                <p>Loading bounties...</p>
+                            ) : error ? (
+                                <p>Error loading bounties</p>
+                            ) : (
+                                bounties.map((bounty) => (
+                                    <AnimalCard
+                                        key={bounty.id}
+                                        prize={bounty.prize}
+                                        name={bounty.speciesName}
+                                        description={bounty.speciesDescription}
+                                        image={bounty.imageLink}
+                                        link={`/bounties/${bounty.id}`}
+                                    />
+                                ))
+                            )}
+                        </div>
+                        {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             {wildlifeSpecies.map((animal) => (
                                 <AnimalCard key={animal.name} {...animal} />
                             ))}
-                        </div>
+                        </div> */}
                     </div>
                 </section>
 
