@@ -13,6 +13,7 @@ contract BrisHack {
         address creator;
     }
     struct Sighting {
+        uint256 id;
         string imageLink;
         string location;
         uint256 timestampSpotted;
@@ -28,6 +29,7 @@ contract BrisHack {
     // Initialize the contract
     constructor() {
         bountyId = 0;
+        sightingId = 0;
     }
 
     // Create Bounties with an ID, certain prize, species name, species description, image, deadline, isSettled and creator
@@ -69,7 +71,7 @@ contract BrisHack {
     // The sighting should be stored in a mapping of bountyId to sightings.
     function submitSighting(uint256 _bountyId, string memory _imageLink, string memory _location) public {
         require(bounties[_bountyId].deadline > block.timestamp, "Bounty deadline has passed");
-        Sighting memory newSighting = Sighting(_imageLink, _location, block.timestamp, false, msg.sender);
+        Sighting memory newSighting = Sighting(sightingId, _imageLink, _location, block.timestamp, false, msg.sender);
         sightings[sightingId] = newSighting;
         bountySightings[_bountyId].push(sightingId);
         sightingId++;
@@ -93,14 +95,25 @@ contract BrisHack {
     // Then distribute the prize to the winners.
     function chooseWinners(uint256 _bountyId, uint256[] memory _winners) public {
         require(bounties[_bountyId].creator == msg.sender, "Only the creator can choose winners");
+        require(!bounties[_bountyId].isSettled, "Bounty is already settled");
+        require(_winners.length > 0, "Must select at least one winner"); // Prevent division by zero
+        require(address(this).balance >= bounties[_bountyId].prize, "Contract balance is insufficient");
+
+        uint256 totalPrize = bounties[_bountyId].prize; 
+        uint256 prizePerWinner = totalPrize / _winners.length;
+        require(prizePerWinner <= totalPrize, "Prize per winner must be less than total prize");
+
         for (uint256 i = 0; i < _winners.length; i++) {
             sightings[_winners[i]].isWinner = true;
         }
-        // Distribute prize to winners
-        // transfer prize to winners
 
         // Set bounty to settled
         bounties[_bountyId].isSettled = true;
+
+        // Distribute prize to winners
+        for (uint256 i = 0; i < _winners.length; i++) {
+            payable(sightings[_winners[i]].submitter).transfer(prizePerWinner);
+        }
     }
 
 }

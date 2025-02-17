@@ -9,6 +9,7 @@ contract BrisHackTest is Test {
 
     function setUp() public {
         brisHack = new BrisHack();
+        vm.deal(address(brisHack), 1 ether);
     }
 
     function testCreateBounty() public {
@@ -87,7 +88,8 @@ contract BrisHackTest is Test {
      function testSubmitSighting() public {
         brisHack.createBounty{value: 100}( "Species A", "Description A", "imageLinkA", block.timestamp + 1 days);
         brisHack.submitSighting(0, "imageLinkSightingA", "Location A");
-        (string memory imageLink, string memory location, uint256 timestampSpotted, bool isWinner, address submitter) = brisHack.sightings(0);
+        (uint256 sightingId, string memory imageLink, string memory location, uint256 timestampSpotted, bool isWinner, address submitter) = brisHack.sightings(0);
+        assertEq(sightingId, 0);
         assertEq(imageLink, "imageLinkSightingA");
         assertEq(location, "Location A");
         assertEq(timestampSpotted, block.timestamp);
@@ -106,16 +108,41 @@ contract BrisHackTest is Test {
     }
 
     function testChooseWinners() public {
-        brisHack.createBounty{value: 100}("Species A", "Description A", "imageLinkA", block.timestamp + 1 days);
+        address bountyCreator = vm.addr(1);
+        address user1 = vm.addr(1);
+        vm.deal(bountyCreator, 1 ether);
+        vm.prank(bountyCreator);
+        brisHack.createBounty{value: 1000000}("Species A", "Description A", "imageLinkA", block.timestamp + 1 days);
+        assertEq(address(brisHack).balance, 1000000000001000000);
+        assertEq(brisHack.bountyId(), 1);
+
+        vm.startPrank(user1);
+        vm.deal(user1, 1 ether);
         brisHack.submitSighting(0, "imageLinkSightingA", "Location A");
         brisHack.submitSighting(0, "imageLinkSightingB", "Location B");
+        uint256 initialBalance = user1.balance;
+        vm.stopPrank();
+
+
         uint256[] memory winners = new uint256[](1);
-        winners[0] = 0;
+        winners[0] = 1;
+
+
+        (, uint256 prize, , , , , , ) = brisHack.bounties(0);
+        assertEq(prize, 1000000);
+        assertEq(winners.length, 1);
+
+        vm.prank(bountyCreator);
         brisHack.chooseWinners(0, winners);
-        (, , , bool isWinner, ) = brisHack.sightings(0);
+
+        (, , , , bool isWinner, ) = brisHack.sightings(1);
         assertEq(isWinner, true);
+
         (, , , , , , bool isSettled, ) = brisHack.bounties(0);
         assertEq(isSettled, true);
+
+        uint256 expectedBalance = initialBalance + prize / winners.length;
+        assertEq(user1.balance, expectedBalance);
     }
 
 }
