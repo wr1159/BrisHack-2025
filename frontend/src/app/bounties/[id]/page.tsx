@@ -57,14 +57,12 @@ export default function BountyPage() {
         functionName: "viewSightings",
         args: [id ? BigInt(id) : BigInt(0)], // Fetch sightings by bounty id
     });
-    console.log("sightingsData", sightingsData);
 
     useEffect(() => {
         if (sightingsData) {
             setSightings([...sightingsData]);
         }
     }, [sightingsData]);
-    console.log("sightings", sightings);
 
     // Using wagmi's useReadContract hook to fetch data from the contract
     const { data, error, isLoading } = useReadContract({
@@ -178,7 +176,11 @@ export default function BountyPage() {
                                 {sightings.map((sighting) => (
                                     <div
                                         key={sighting.id}
-                                        className="border border-border p-4 rounded-lg bg-background/50"
+                                        className={`border border-border p-4 rounded-lg bg-background/50 ${
+                                            sighting.isWinner
+                                                ? "bg-primary/30 border-primary"
+                                                : ""
+                                        }`} // Apply extra styling if it's a winner
                                     >
                                         <img
                                             src={sighting.imageLink}
@@ -195,6 +197,11 @@ export default function BountyPage() {
                                                 ) * 1000
                                             ).toLocaleString()}
                                         </p>
+                                        {sighting.isWinner && (
+                                            <span className="text-sm text-primary font-bold">
+                                                Winner
+                                            </span>
+                                        )}
                                     </div>
                                 ))}
                             </div>
