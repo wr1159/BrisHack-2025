@@ -29,12 +29,12 @@ export default function Footer() {
 
           {/* Tagline */}
           <p className="text-center text-primary">
-            🌿 Protect Rainforests - Protect Our Future 🌿
+            🌿 Protect the Ecosystem - Protect Our Future 🌿
           </p>
 
           {/* Copyright */}
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Rainforest Explorer
+            © {new Date().getFullYear()}  SnapTrack
           </p>
         </div>
       </div>

@@ -1,62 +1,77 @@
 "use client";
 
+import { motion, useScroll, useTransform } from "framer-motion";
+import Image from "next/image";
 
-import { motion } from 'framer-motion';
-import Image from 'next/image';
-
-import RainEffect from '../components/RainEffect';
-import AnimalCard from '@/components/AnimalCard';
+import RainEffect from "../components/RainEffect";
+import AnimalCard from "@/components/AnimalCard";
 
 const wildlifeSpecies = [
   {
-    name: 'Scarlet Macaw',
-    habitat: 'Canopy Layer',
-    description: 'Vibrant tropical parrot with brilliant plumage',
-    image: '/images/macaw.jpg',
-    link: '/wildlife/macaw'
+    name: "Scarlet Macaw",
+    habitat: "Canopy Layer",
+    description: "Vibrant tropical parrot with brilliant plumage",
+    image: "/images/macaw.jpg",
+    link: "/wildlife/macaw",
   },
   {
-    name: 'Scottish Wildcat',
-    habitat: 'Forest Floor',
-    description: 'Apex predator of the Amazon rainforest',
-    image: '/images/5125.jpg',
-    link: '/wildlife/jaguar'
+    name: "Scottish Wildcat",
+    habitat: "Forest Floor",
+    description: "Apex predator of the Amazon rainforest",
+    image: "/images/5125.jpg",
+    link: "/wildlife/jaguar",
   },
   {
-    name: 'Poison Dart Frog',
-    habitat: 'Understory',
-    description: 'Small amphibian with bright warning colors',
-    image: '/images/frog.jpg',
-    link: '/wildlife/frog'
+    name: "Poison Dart Frog",
+    habitat: "Understory",
+    description: "Small amphibian with bright warning colors",
+    image: "/images/frog.jpg",
+    link: "/wildlife/frog",
   },
 ];
 
 export default function Home() {
+  const { scrollY } = useScroll(); // Track scroll position
+
+  // Move image from left (-200px) to right (200px) as user scrolls from 0px to 1000px
+  const x = useTransform(scrollY, [0, 1000], [-200, 200]);
+
   return (
     <div className="relative min-h-screen">
       <RainEffect />
-      
-      <motion.main 
+
+      <motion.main
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         className="relative z-10"
       >
         {/* Hero Section */}
         <section className="relative h-[60vh] w-full">
+          {/* Moving PNG Image */}
+          <motion.div
+            style={{ x }} // Moves image left to right on scroll
+            className="absolute top-40 left-0 w-40 h-10"
+          >
+            <Image
+              src="/images/tiger.png" // Replace with your PNG file
+              alt="Moving Image"
+              width={1050}
+              height={1050}
+            />
+          </motion.div>
 
-          
           <div className="relative h-full flex items-center justify-center text-center">
             <motion.div
-              initial={{ y: 20, opacity: 0 }}
+              initial={{ y: 0, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.8 }}
               className="max-w-4xl px-4"
             >
               <h1 className="text-4xl md:text-7xl font-bold text-primary mb-6">
-                Explore the Rainforest
+                SnapTrack
               </h1>
-              <p className="text-lg md:text-xl text-foreground/90">
-                Discover the world's most biodiverse ecosystem and learn how we can protect it
+              <p className="text-lg md:text-xl font-bold text-foreground/90">
+                Get paid saving the planet!
               </p>
             </motion.div>
           </div>
@@ -69,24 +84,28 @@ export default function Home() {
               whileHover={{ scale: 1.05 }}
               className="p-6 rounded-lg border border-border bg-background/50 "
             >
-              <h3 className="text-2xl font-bold text-foreground/80 mb-2">50%</h3>
-              <p className="text-foreground/80">of Earth's species live in rainforests</p>
+              <h3 className="text-2xl font-bold text-foreground/80 mb-2">80%</h3>
+              <p className="text-foreground/80">
+                of people are more likely to engage in conservation efforts when they see compelling images or videos of endangered species in their natural habitat. 
+              </p>
             </motion.div>
-            
+
             <motion.div
               whileHover={{ scale: 1.05 }}
               className="p-6 rounded-lg border border-border bg-background/50 "
             >
-              <h3 className="text-2xl font-bold text-foreground/80 mb-2">30%</h3>
-              <p className="text-foreground/80">of global oxygen production</p>
+              <h3 className="text-2xl font-bold text-foreground/80 mb-2">48%</h3>
+              <p className="text-foreground/80">of species are facing population decline through a survey of 71,000 species.</p>
             </motion.div>
-            
+
             <motion.div
               whileHover={{ scale: 1.05 }}
               className="p-6 rounded-lg border border-border bg-background/50 "
             >
-              <h3 className="text-2xl font-bold text-foreground/80 mb-2">1/5</h3>
-              <p className="text-foreground/80">of freshwater sources originate here</p>
+              <h3 className="text-2xl font-bold text-foreground/80 mb-2">$423 billion</h3>
+              <p className="text-foreground/80">
+              of costs incurred due to Invasive species globally in damages, management efforts, and lost agricultural productivity. 
+              </p>
             </motion.div>
           </div>
         </section>
@@ -101,13 +120,10 @@ export default function Home() {
             >
               Current Bounties
             </motion.h2>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {wildlifeSpecies.map((animal, index) => (
-                <AnimalCard
-                  key={animal.name}
-                  {...animal}
-                />
+              {wildlifeSpecies.map((animal) => (
+                <AnimalCard key={animal.name} {...animal} />
               ))}
             </div>
           </div>
@@ -124,7 +140,7 @@ export default function Home() {
               <h2 className="text-3xl font-bold text-foreground mb-4">
                 Place A Bounty
               </h2>
-              <p className="text-foreground/80 mb-8">
+              <p className="text-foreground/160 mb-8">
                 Help us protect these vital ecosystems for future generations
               </p>
               <motion.button
