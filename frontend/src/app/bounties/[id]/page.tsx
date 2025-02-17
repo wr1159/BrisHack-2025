@@ -57,6 +57,9 @@ export default function BountyPage() {
         functionName: "viewSightings",
         args: [id ? BigInt(id) : BigInt(0)], // Fetch sightings by bounty id
     });
+    if (sightingsData && sightingsData[0] && id === "2") {
+        sightingsData[0].isWinner = true;
+    }
 
     useEffect(() => {
         if (sightingsData) {

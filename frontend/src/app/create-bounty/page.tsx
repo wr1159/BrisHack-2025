@@ -146,7 +146,7 @@ export default function CreateBounty() {
                                     Prize
                                 </label>
                                 <input
-                                    id="deadline"
+                                    id="prize"
                                     className="w-full px-4 py-2 border border-border rounded-lg"
                                     placeholder="Enter prize amount"
                                     value={prize}

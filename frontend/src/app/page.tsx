@@ -51,7 +51,7 @@ export default function Home() {
         address: snapTrackAddress,
         abi: snapTrackAbi,
         functionName: "viewBounties",
-        args: [BigInt(0), BigInt(10)], // Fetch first 10 bounties
+        args: [BigInt(2), BigInt(10)], // Fetch 2nd to 12th bounties
     });
     useEffect(() => {
         if (data) {
